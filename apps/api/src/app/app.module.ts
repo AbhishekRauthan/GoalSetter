@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { GoalsController } from '../goals/goals.controller';
 
 @Module({
   imports: [
@@ -9,7 +10,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       envFilePath: '.local.env',
     }),
   ],
-  controllers: [],
+  controllers: [GoalsController],
   providers: [],
 })
 export class AppModule {}
