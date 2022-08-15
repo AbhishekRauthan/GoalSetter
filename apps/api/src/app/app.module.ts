@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { GoalsController } from '../goals/goals.controller';
+import { GoalsModule } from '../goals/goals.module';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
@@ -9,8 +10,10 @@ import { GoalsController } from '../goals/goals.controller';
     ConfigModule.forRoot({
       envFilePath: '.local.env',
     }),
+    GoalsModule,
+    UsersModule
   ],
-  controllers: [GoalsController],
+  controllers: [],
   providers: [],
 })
 export class AppModule {}
