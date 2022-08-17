@@ -9,6 +9,7 @@ import {
   Put,
   Param,
   Delete,
+  HttpException,
 } from '@nestjs/common';
 import { GoalsService } from './goals.service';
 
@@ -24,9 +25,13 @@ export class GoalsController {
   @Post()
   async createGoal(@Body() body, @Res() res: Response) {
     if (!body.text) {
-      res
-        .status(HttpStatus.BAD_REQUEST)
-        .json({ message: 'Body content not present' });
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: 'Title not provided',
+        },
+        HttpStatus.BAD_REQUEST
+      );
     }
     const goal = await this.goalsService.create(body.text);
 
@@ -36,16 +41,24 @@ export class GoalsController {
   @Put(':id')
   async putGoal(@Param('id') id: string, @Body() body, @Res() res: Response) {
     if (!body.text) {
-      res
-        .status(HttpStatus.BAD_REQUEST)
-        .json({ message: 'Body content not present' });
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: 'Body content not present',
+        },
+        HttpStatus.BAD_REQUEST
+      );
     }
     try {
       const goal = await this.goalsService.getGoalById(id);
     } catch (error) {
-      return res
-        .status(HttpStatus.NOT_FOUND)
-        .send({ message: `Goal of id:${id} not found` });
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: `Goal of id:${id} not found`,
+        },
+        HttpStatus.BAD_REQUEST
+      );
     }
 
     const updatedGoal = await this.goalsService.updateGoalById(id, body.text);
@@ -57,9 +70,13 @@ export class GoalsController {
     try {
       const goal = await this.goalsService.getGoalById(id);
     } catch (error) {
-      return res
-        .status(HttpStatus.NOT_FOUND)
-        .send({ message: `Goal of id:${id} not found` });
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: `Goal of id:${id} not found`,
+        },
+        HttpStatus.BAD_REQUEST
+      );
     }
     await this.goalsService.deleteGoalById(id);
     res.status(HttpStatus.OK).send({ message: `Delete goals #${id}` });
