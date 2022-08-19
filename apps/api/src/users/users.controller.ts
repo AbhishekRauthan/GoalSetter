@@ -9,7 +9,7 @@ import {
 import { Response } from 'express';
 import { registerUserBody } from './types';
 import { UsersService } from './users.service';
-import { genSalt, hash } from 'bcryptjs';
+import { genSalt, hash, compare } from 'bcryptjs';
 
 @Controller('users')
 export class UsersController {
@@ -64,10 +64,26 @@ export class UsersController {
   }
 
   @Post('login')
-  loginUser(@Body() body, @Res() res: Response) {
-    res.status(HttpStatus.OK).json({
-      message: 'POST /login WORKING',
-    });
+  async loginUser(@Body() body: registerUserBody, @Res() res: Response) {
+    const { email, password } = body;
+
+    const user = await this.usersService.getUser(email);
+
+    if (user && (await compare(password, user.password))) {
+      res.status(HttpStatus.OK).json({
+        _id: user.id,
+        name: user.name,
+        email: user.email,
+      });
+    } else {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: 'Invalid credentials',
+        },
+        HttpStatus.BAD_REQUEST
+      );
+    }
   }
 
   @Post('me')
