@@ -1,19 +1,27 @@
 import {
   Body,
   Controller,
+  Get,
   HttpException,
   HttpStatus,
   Post,
+  Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { registerUserBody } from './types';
+import { registerUserBody, reqUser } from '../types';
 import { UsersService } from './users.service';
 import { genSalt, hash, compare } from 'bcryptjs';
+import { JwtService } from '@nestjs/jwt';
+import { JwtAuthGuard } from './jwt/jwt.gaurd';
 
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private jwtService: JwtService
+  ) {}
 
   @Post()
   async registerUser(@Body() body: registerUserBody, @Res() res: Response) {
@@ -51,6 +59,7 @@ export class UsersController {
         _id: user.id,
         name: user.name,
         email: user.email,
+        token: this.jwtService.sign({ id: user.id }),
       });
     } else {
       throw new HttpException(
@@ -74,6 +83,7 @@ export class UsersController {
         _id: user.id,
         name: user.name,
         email: user.email,
+        token: this.jwtService.sign({ id: user.id }),
       });
     } else {
       throw new HttpException(
@@ -86,10 +96,9 @@ export class UsersController {
     }
   }
 
-  @Post('me')
-  getUserMe(@Body() body, @Res() res: Response) {
-    res.status(HttpStatus.OK).json({
-      message: 'POST /me WORKING',
-    });
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  getUserMe(@Req() req: reqUser, @Res() res: Response) {
+    res.status(HttpStatus.OK).json(req.user);
   }
 }
