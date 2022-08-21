@@ -13,12 +13,12 @@ export class GoalsService {
     return this.goalModel.find({});
   }
 
-  async create(text: string) {
-    return this.goalModel.create({ text });
+  async create({ text, id }: { text: string; id: string }) {
+    return this.goalModel.create({ text, user: id });
   }
 
   async updateGoalById(id: string, text: string) {
-    return this.goalModel.findByIdAndUpdate(id, { text });
+    return this.goalModel.findByIdAndUpdate(id, { text }, { new: true });
   }
 
   async deleteGoalById(id: string) {

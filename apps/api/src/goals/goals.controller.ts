@@ -10,20 +10,27 @@ import {
   Param,
   Delete,
   HttpException,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { GoalsService } from './goals.service';
+import { JwtAuthGuard } from '../users/jwt/jwt.gaurd';
+import { reqUser } from '../types';
 
 @Controller('goals')
 export class GoalsController {
   constructor(private goalsService: GoalsService) {}
+
+  @UseGuards(JwtAuthGuard)
   @Get()
   async getGoals(@Res() res: Response) {
     const goal = await this.goalsService.getAllGoals();
     res.status(HttpStatus.OK).send(goal);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  async createGoal(@Body() body, @Res() res: Response) {
+  async createGoal(@Body() body, @Req() req: reqUser, @Res() res: Response) {
     if (!body.text) {
       throw new HttpException(
         {
@@ -33,13 +40,42 @@ export class GoalsController {
         HttpStatus.BAD_REQUEST
       );
     }
-    const goal = await this.goalsService.create(body.text);
+    if (!req.user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNAUTHORIZED,
+          error: `User not found`,
+        },
+        HttpStatus.UNAUTHORIZED
+      );
+    }
+    let goal;
+    try {
+      goal = await this.goalsService.create({
+        id: req.user.id,
+        text: body.text,
+      });
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNAUTHORIZED,
+          error: `User not found 2`,
+        },
+        HttpStatus.UNAUTHORIZED
+      );
+    }
 
     res.status(HttpStatus.CREATED).send(goal);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
-  async putGoal(@Param('id') id: string, @Body() body, @Res() res: Response) {
+  async putGoal(
+    @Param('id') id: string,
+    @Body() body,
+    @Req() req: reqUser,
+    @Res() res: Response
+  ) {
     if (!body.text) {
       throw new HttpException(
         {
@@ -49,26 +85,50 @@ export class GoalsController {
         HttpStatus.BAD_REQUEST
       );
     }
-    try {
-      const goal = await this.goalsService.getGoalById(id);
-    } catch (error) {
+    if (!req.user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNAUTHORIZED,
+          error: `User not found`,
+        },
+        HttpStatus.UNAUTHORIZED
+      );
+    }
+    const goal = await this.goalsService.getGoalById(id);
+    if (!goal) {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
           error: `Goal of id:${id} not found`,
         },
         HttpStatus.BAD_REQUEST
+      );
+    }
+
+    if (goal.user.toString() !== req.user.id) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNAUTHORIZED,
+          error: `Not Authorized`,
+        },
+        HttpStatus.UNAUTHORIZED
       );
     }
 
     const updatedGoal = await this.goalsService.updateGoalById(id, body.text);
-    res.status(HttpStatus.FOUND).send(updatedGoal);
+    res.status(HttpStatus.OK).send(updatedGoal);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async deleteGoal(@Param('id') id: string, @Res() res: Response) {
+  async deleteGoal(
+    @Param('id') id: string,
+    @Req() req: reqUser,
+    @Res() res: Response
+  ) {
+    let goal;
     try {
-      const goal = await this.goalsService.getGoalById(id);
+      goal = await this.goalsService.getGoalById(id);
     } catch (error) {
       throw new HttpException(
         {
@@ -78,7 +138,26 @@ export class GoalsController {
         HttpStatus.BAD_REQUEST
       );
     }
-    await this.goalsService.deleteGoalById(id);
-    res.status(HttpStatus.OK).send({ message: `Delete goals #${id}` });
+    if (goal.user.toString() !== req.user.id) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNAUTHORIZED,
+          error: `Not Authorized`,
+        },
+        HttpStatus.UNAUTHORIZED
+      );
+    }
+    try {
+      await this.goalsService.deleteGoalById(id);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.EXPECTATION_FAILED,
+          error: `Error! Unable to delete`,
+        },
+        HttpStatus.EXPECTATION_FAILED
+      );
+    }
+    res.status(HttpStatus.OK).send({ id });
   }
 }
