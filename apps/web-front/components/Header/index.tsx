@@ -40,7 +40,7 @@ const Header = () => {
         listStyleType="none"
         color="black"
       >
-        <HeadLink btnTxt="Logout" href="/login" icon={FaSignInAlt} />
+        <HeadLink btnTxt="Login" href="/login" icon={FaSignInAlt} />
         <HeadLink btnTxt="Register" href="/register" icon={FaUser} />
       </HStack>
       <Box display={{ base: 'block', md: 'none' }}>
@@ -53,7 +53,7 @@ const Header = () => {
           />
           <MenuList listStyleType="none" minW="max-content">
             <MenuItem width="max-content">
-              <HeadLink btnTxt="Logout" href="/login" icon={FaSignInAlt} />
+              <HeadLink btnTxt="Login" href="/login" icon={FaSignInAlt} />
             </MenuItem>
             <MenuItem>
               <HeadLink btnTxt="Register" href="/register" icon={FaUser} />
