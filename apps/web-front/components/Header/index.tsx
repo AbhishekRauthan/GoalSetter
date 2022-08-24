@@ -1,10 +1,8 @@
 import Link from 'next/link';
 import {
   Box,
-  Button,
   Flex,
   HStack,
-  Icon,
   IconButton,
   Menu,
   MenuButton,
