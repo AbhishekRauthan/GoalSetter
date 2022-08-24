@@ -9,20 +9,17 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { FaUser } from 'react-icons/fa';
+import { FaSignInAlt } from 'react-icons/fa';
 import { FiEyeOff, FiEye } from 'react-icons/fi';
 import { PrimaryBtn } from '../components/Button';
 import { FormLabel } from '../globalStyles';
 
-const Register = () => {
+const Login = () => {
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
     password: '',
-    password2: '',
   });
   const [showPass, setShowPass] = useState(false);
-  const [showPass2, setShowPass2] = useState(false);
   return (
     <>
       <VStack
@@ -38,25 +35,14 @@ const Register = () => {
             justifyContent="center"
             textTransform="capitalize"
           >
-            <Icon as={FaUser} marginRight="3" />
-            register
+            <Icon as={FaSignInAlt} marginRight="3" />
+            login
           </Heading>
           <Text color="#828282" fontWeight="semibold" letterSpacing="wider">
-            Please create a account
+            Login and start setting goals
           </Text>
         </Box>
         <VStack as="form" paddingTop="7" spacing="5">
-          <InputGroup position="relative">
-            <Input
-              _placeholder={{ opacity: 0 }}
-              placeholder="Name"
-              variant="flushed"
-              size="sm"
-              focusBorderColor="black"
-              className="peer"
-            />
-            <FormLabel>Name</FormLabel>
-          </InputGroup>
           <InputGroup position="relative">
             <Input
               _placeholder={{ opacity: 0 }}
@@ -85,29 +71,11 @@ const Register = () => {
               children={<Icon as={showPass ? FiEye : FiEyeOff} color="black" />}
             />
           </InputGroup>
-          <InputGroup position="relative">
-            <Input
-              _placeholder={{ opacity: 0 }}
-              type={showPass2 ? 'text' : 'password'}
-              placeholder="Name"
-              variant="flushed"
-              size="sm"
-              focusBorderColor="black"
-              className="peer"
-            />
-            <FormLabel>confirm password</FormLabel>
-            <InputRightElement
-              onClick={() => setShowPass2(!showPass2)}
-              children={
-                <Icon as={showPass2 ? FiEye : FiEyeOff} color="black" />
-              }
-            />
-          </InputGroup>
-          <PrimaryBtn>Register</PrimaryBtn>
+          <PrimaryBtn>Login</PrimaryBtn>
         </VStack>
       </VStack>
     </>
   );
 };
 
-export default Register;
+export default Login;
