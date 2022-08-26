@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { GoalsService } from './goals.service';
 import { JwtAuthGuard } from '../users/jwt/jwt.gaurd';
-import { reqUser } from '../types';
+import { UserObject } from '@full-stack/types';
 
 @Controller('goals')
 export class GoalsController {
@@ -30,7 +30,7 @@ export class GoalsController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  async createGoal(@Body() body, @Req() req: reqUser, @Res() res: Response) {
+  async createGoal(@Body() body, @Req() req: UserObject, @Res() res: Response) {
     if (!body.text) {
       throw new HttpException(
         {
@@ -73,7 +73,7 @@ export class GoalsController {
   async putGoal(
     @Param('id') id: string,
     @Body() body,
-    @Req() req: reqUser,
+    @Req() req: UserObject,
     @Res() res: Response
   ) {
     if (!body.text) {
@@ -123,7 +123,7 @@ export class GoalsController {
   @Delete(':id')
   async deleteGoal(
     @Param('id') id: string,
-    @Req() req: reqUser,
+    @Req() req: UserObject,
     @Res() res: Response
   ) {
     let goal;

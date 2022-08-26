@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { registerUserBody, reqUser } from '../types';
+import { UserDetails, UserObject } from '@full-stack/types';
 import { UsersService } from './users.service';
 import { genSalt, hash, compare } from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
@@ -24,7 +24,7 @@ export class UsersController {
   ) {}
 
   @Post()
-  async registerUser(@Body() body: registerUserBody, @Res() res: Response) {
+  async registerUser(@Body() body: UserDetails, @Res() res: Response) {
     const { email, name, password } = body;
     if (!email || !name || !password) {
       throw new HttpException(
@@ -73,7 +73,7 @@ export class UsersController {
   }
 
   @Post('login')
-  async loginUser(@Body() body: registerUserBody, @Res() res: Response) {
+  async loginUser(@Body() body: UserDetails, @Res() res: Response) {
     const { email, password } = body;
 
     const user = await this.usersService.getUser(email);
@@ -98,7 +98,7 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  getUserMe(@Req() req: reqUser, @Res() res: Response) {
+  getUserMe(@Req() req: UserObject , @Res() res: Response) {
     res.status(HttpStatus.OK).json(req.user);
   }
 }
