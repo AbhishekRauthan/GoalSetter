@@ -17,7 +17,7 @@ const HeadLink = ({ btnTxt, href, icon }: HeadLinkProps) => {
           leftIcon={<Icon as={icon} />}
           color="black"
           textTransform="capitalize"
-          size="xs"
+          size={{base:"xs", lg:"lg"}}
           fontWeight="medium"
         >
           {btnTxt}

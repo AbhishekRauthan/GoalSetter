@@ -26,7 +26,12 @@ const Header = () => {
       borderStyle="solid"
       borderColor="#e6e6e6"
     >
-      <LogoContainer textDecoration="none" color="black" letterSpacing="widest">
+      <LogoContainer
+        textDecoration="none"
+        color="black"
+        letterSpacing="widest"
+        fontSize={{ lg: '3xl' }}
+      >
         <Link href="/">GoalSetter</Link>
       </LogoContainer>
       <HStack
