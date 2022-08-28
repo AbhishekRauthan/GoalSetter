@@ -1,18 +1,9 @@
-import {
-  Box,
-  Heading,
-  Icon,
-  Input,
-  InputGroup,
-  InputRightElement,
-  Text,
-  VStack,
-} from '@chakra-ui/react';
+import { Box, VStack } from '@chakra-ui/react';
 import { useState } from 'react';
 import { FaUser } from 'react-icons/fa';
-import { FiEyeOff, FiEye } from 'react-icons/fi';
 import { PrimaryBtn } from '../components/Button';
-import { FormLabel } from '../globalStyles';
+import { PrimaryHeading, SecondaryHeading } from '../components/Heading';
+import { Input, PasswordInput } from '../components/Input';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -21,8 +12,6 @@ const Register = () => {
     password: '',
     password2: '',
   });
-  const [showPass, setShowPass] = useState(false);
-  const [showPass2, setShowPass2] = useState(false);
   return (
     <>
       <VStack
@@ -32,77 +21,14 @@ const Register = () => {
         spacing="5"
       >
         <Box>
-          <Heading
-            as="h1"
-            display="flex"
-            justifyContent="center"
-            textTransform="capitalize"
-          >
-            <Icon as={FaUser} marginRight="3" />
-            register
-          </Heading>
-          <Text color="#828282" fontWeight="semibold" letterSpacing="wider">
-            Please create a account
-          </Text>
+          <PrimaryHeading icon={FaUser}>Register</PrimaryHeading>
+          <SecondaryHeading>Please create an account</SecondaryHeading>
         </Box>
-        <VStack as="form" paddingTop="7" spacing="5">
-          <InputGroup position="relative">
-            <Input
-              _placeholder={{ opacity: 0 }}
-              placeholder="Name"
-              variant="flushed"
-              size="sm"
-              focusBorderColor="black"
-              className="peer"
-            />
-            <FormLabel>Name</FormLabel>
-          </InputGroup>
-          <InputGroup position="relative">
-            <Input
-              _placeholder={{ opacity: 0 }}
-              placeholder="Name"
-              type="email"
-              variant="flushed"
-              size="sm"
-              focusBorderColor="black"
-              className="peer"
-            />
-            <FormLabel>email</FormLabel>
-          </InputGroup>
-          <InputGroup position="relative">
-            <Input
-              _placeholder={{ opacity: 0 }}
-              type={showPass ? 'text' : 'password'}
-              placeholder="Name"
-              variant="flushed"
-              size="sm"
-              focusBorderColor="black"
-              className="peer"
-            />
-            <FormLabel>password</FormLabel>
-            <InputRightElement
-              onClick={() => setShowPass(!showPass)}
-              children={<Icon as={showPass ? FiEye : FiEyeOff} color="black" />}
-            />
-          </InputGroup>
-          <InputGroup position="relative">
-            <Input
-              _placeholder={{ opacity: 0 }}
-              type={showPass2 ? 'text' : 'password'}
-              placeholder="Name"
-              variant="flushed"
-              size="sm"
-              focusBorderColor="black"
-              className="peer"
-            />
-            <FormLabel>confirm password</FormLabel>
-            <InputRightElement
-              onClick={() => setShowPass2(!showPass2)}
-              children={
-                <Icon as={showPass2 ? FiEye : FiEyeOff} color="black" />
-              }
-            />
-          </InputGroup>
+        <VStack as="form" paddingTop="7" spacing="8">
+          <Input type="name">Name</Input>
+          <Input type="email">Email</Input>
+          <PasswordInput>password</PasswordInput>
+          <PasswordInput>confirm password</PasswordInput>
           <PrimaryBtn>Register</PrimaryBtn>
         </VStack>
       </VStack>

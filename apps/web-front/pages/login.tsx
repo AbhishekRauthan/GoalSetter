@@ -1,25 +1,25 @@
-import {
-  Box,
-  Heading,
-  Icon,
-  Input,
-  InputGroup,
-  InputRightElement,
-  Text,
-  VStack,
-} from '@chakra-ui/react';
-import { useState } from 'react';
+import { Box, VStack } from '@chakra-ui/react';
+import { useRef, useState } from 'react';
 import { FaSignInAlt } from 'react-icons/fa';
-import { FiEyeOff, FiEye } from 'react-icons/fi';
 import { PrimaryBtn } from '../components/Button';
-import { FormLabel } from '../globalStyles';
+import { PrimaryHeading, SecondaryHeading } from '../components/Heading';
+import { Input, PasswordInput } from '../components/Input';
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-  const [showPass, setShowPass] = useState(false);
+
+  const emailRef = useRef<HTMLInputElement>();
+  const pwrdRef = useRef<HTMLInputElement>();
+
+  function onSubmit() {
+    const email = emailRef.current.value;
+    const password = pwrdRef.current.value;
+    console.log({ email, password });
+  }
+  
   return (
     <>
       <VStack
@@ -29,49 +29,13 @@ const Login = () => {
         spacing="5"
       >
         <Box>
-          <Heading
-            as="h1"
-            display="flex"
-            justifyContent="center"
-            textTransform="capitalize"
-          >
-            <Icon as={FaSignInAlt} marginRight="3" />
-            login
-          </Heading>
-          <Text color="#828282" fontWeight="semibold" letterSpacing="wider">
-            Login and start setting goals
-          </Text>
+          <PrimaryHeading icon={FaSignInAlt}>login</PrimaryHeading>
+          <SecondaryHeading>Login and start setting goals</SecondaryHeading>
         </Box>
-        <VStack as="form" paddingTop="7" spacing="5">
-          <InputGroup position="relative">
-            <Input
-              _placeholder={{ opacity: 0 }}
-              placeholder="Name"
-              type="email"
-              variant="flushed"
-              size="sm"
-              focusBorderColor="black"
-              className="peer"
-            />
-            <FormLabel>email</FormLabel>
-          </InputGroup>
-          <InputGroup position="relative">
-            <Input
-              _placeholder={{ opacity: 0 }}
-              type={showPass ? 'text' : 'password'}
-              placeholder="Name"
-              variant="flushed"
-              size="sm"
-              focusBorderColor="black"
-              className="peer"
-            />
-            <FormLabel>password</FormLabel>
-            <InputRightElement
-              onClick={() => setShowPass(!showPass)}
-              children={<Icon as={showPass ? FiEye : FiEyeOff} color="black" />}
-            />
-          </InputGroup>
-          <PrimaryBtn>Login</PrimaryBtn>
+        <VStack as="form" paddingTop="7" spacing="8">
+          <Input type="email" ref={emailRef}>email</Input>
+          <PasswordInput ref={pwrdRef}>password</PasswordInput>
+          <PrimaryBtn onClick={onSubmit}>Login</PrimaryBtn>
         </VStack>
       </VStack>
     </>
