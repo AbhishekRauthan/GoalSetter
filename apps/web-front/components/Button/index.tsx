@@ -12,6 +12,7 @@ export const PrimaryBtn: FC<BtnProps> = ({ children, ...rest }) => (
     bgColor="black"
     color="white"
     textTransform="capitalize"
+    size="lg"
     {...rest}
   >
     {children}
