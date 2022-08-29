@@ -5,7 +5,7 @@ interface Props {
   children: ReactNode;
 }
 
-const CenterCon = ({ children }: Props) => {
+export const CenterCon = ({ children }: Props) => {
   return (
     <VStack
       alignItems="center"
@@ -18,4 +18,10 @@ const CenterCon = ({ children }: Props) => {
   );
 };
 
-export default CenterCon;
+export const FormCon = ({ children }: Props) => {
+  return (
+    <VStack as="form" paddingTop="7" spacing="8">
+      {children}
+    </VStack>
+  );
+};
