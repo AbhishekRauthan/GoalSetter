@@ -11,3 +11,10 @@ export interface UserObject {
     email: string;
   };
 }
+
+export interface User {
+  email: string;
+  name: string;
+  token: string;
+  _id: string;
+}
