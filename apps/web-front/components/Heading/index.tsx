@@ -25,7 +25,7 @@ export const PrimaryHeading: FC<HeadingProp> = ({
       fontSize={{ base: '5xl' }}
       {...rest}
     >
-      <Icon as={icon} marginRight="3" />
+      {icon ? <Icon as={icon} marginRight="3" /> : ''}
       {children}
     </Heading>
   );
@@ -33,12 +33,7 @@ export const PrimaryHeading: FC<HeadingProp> = ({
 
 export const SecondaryHeading: FC<HeadingProp> = ({ children, ...rest }) => {
   return (
-    <Heading
-      as="h2"
-      color="#828282"
-      fontWeight="semibold"
-      {...rest}
-    >
+    <Heading as="h2" color="#828282" fontWeight="semibold" {...rest}>
       {children}
     </Heading>
   );
