@@ -1,25 +1,31 @@
 import { Box, VStack } from '@chakra-ui/react';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { FaSignInAlt } from 'react-icons/fa';
 import { PrimaryBtn } from '../components/Button';
 import { PrimaryHeading, SecondaryHeading } from '../components/Heading';
 import { Input, PasswordInput } from '../components/Input';
+import axios from 'axios';
+import { FormCon } from '../components/Container';
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-
   const emailRef = useRef<HTMLInputElement>();
   const pwrdRef = useRef<HTMLInputElement>();
 
-  function onSubmit() {
+  async function onSubmit() {
     const email = emailRef.current.value;
     const password = pwrdRef.current.value;
-    console.log({ email, password });
+
+    const response = await axios.post('/api/users/login', {
+      email,
+      password,
+    });
+    localStorage.setItem('user_token', JSON.stringify(response.data));
+
+    const user = localStorage.getItem('user_token');
+    console.log(JSON.parse(user));
+    
   }
-  
+
   return (
     <>
       <VStack
@@ -32,11 +38,13 @@ const Login = () => {
           <PrimaryHeading icon={FaSignInAlt}>login</PrimaryHeading>
           <SecondaryHeading>Login and start setting goals</SecondaryHeading>
         </Box>
-        <VStack as="form" paddingTop="7" spacing="8">
-          <Input type="email" ref={emailRef}>email</Input>
+        <FormCon>
+          <Input type="email" ref={emailRef}>
+            email
+          </Input>
           <PasswordInput ref={pwrdRef}>password</PasswordInput>
           <PrimaryBtn onClick={onSubmit}>Login</PrimaryBtn>
-        </VStack>
+        </FormCon>
       </VStack>
     </>
   );
