@@ -1,11 +1,12 @@
 import { AppProps } from 'next/app';
 import Header from '../components/Header';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, Spinner } from '@chakra-ui/react';
 import Head from 'next/head';
 import { theme } from '../theme';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuthStore } from '../feature/store';
 import router from 'next/router';
+import { CenterCon } from '../components/Container';
 
 function CustomApp({ Component, pageProps }: AppProps) {
   const { setUser } = useAuthStore();
@@ -15,6 +16,10 @@ function CustomApp({ Component, pageProps }: AppProps) {
       localUser ? setUser(JSON.parse(localUser)) : router.push('/login');
     }
   }, []);
+
+  const [loading, setLoading] = useState(false);
+  router.events.on('routeChangeStart', () => setLoading(true));
+  router.events.on('routeChangeComplete', () => setLoading(false));
 
   return (
     <>
@@ -26,9 +31,15 @@ function CustomApp({ Component, pageProps }: AppProps) {
       </Head>
       <ChakraProvider resetCSS theme={theme}>
         <Header />
-        <main className="app">
-          <Component {...pageProps} />
-        </main>
+        {loading ? (
+          <CenterCon>
+            <Spinner size="lg" />
+          </CenterCon>
+        ) : (
+          <main className="app">
+            <Component {...pageProps} />
+          </main>
+        )}
       </ChakraProvider>
     </>
   );
