@@ -18,3 +18,9 @@ export interface User {
   token: string;
   _id: string;
 }
+
+export interface Goal {
+  text: string;
+  user: string;
+  id: string;
+}
