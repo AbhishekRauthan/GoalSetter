@@ -20,7 +20,7 @@ import { useAuthStore } from 'apps/web-front/feature/store';
 
 const Header = () => {
   const { isUser } = isUserShown();
-  const { reset } = useAuthStore();
+  const { resetUser } = useAuthStore();
 
   return (
     <Flex
@@ -50,7 +50,7 @@ const Header = () => {
             textTransform="capitalize"
             size={{ base: 'xs', lg: 'lg' }}
             fontWeight="medium"
-            onClick={() => reset()}
+            onClick={() => resetUser()}
           >
             logout
           </Button>

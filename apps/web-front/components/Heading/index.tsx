@@ -22,7 +22,8 @@ export const PrimaryHeading: FC<HeadingProp> = ({
       display="flex"
       justifyContent="center"
       textTransform="capitalize"
-      fontSize={{ base: '5xl' }}
+      fontSize={{ base: '3xl', md: '4xl', lg: '5xl' }}
+      textAlign="center"
       {...rest}
     >
       {icon ? <Icon as={icon} marginRight="3" /> : ''}
