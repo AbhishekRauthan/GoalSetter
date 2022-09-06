@@ -23,9 +23,10 @@ export class GoalsController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async getGoals(@Res() res: Response) {
+  async getGoals(@Req() req: UserObject, @Res() res: Response) {
     const goal = await this.goalsService.getAllGoals();
-    res.status(HttpStatus.OK).send(goal);
+    const filterGoals = goal.filter((g) => g.user.toString() === req.user.id);
+    res.status(HttpStatus.OK).send(filterGoals);
   }
 
   @UseGuards(JwtAuthGuard)
