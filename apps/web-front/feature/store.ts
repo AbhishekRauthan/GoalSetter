@@ -1,6 +1,6 @@
 import { Goal, User } from '@full-stack/types';
 import create from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 
 export interface UserState {
   user: User | null;
@@ -33,19 +33,26 @@ export const useAuthStore = create<UserState>()(
 );
 
 export const useGoalState = create<GoalState>()(
-  devtools((set) => ({
-    goals: [],
-    resetGoal: () => {
-      set(() => ({ goals: [] }));
-    },
-    addGoal: (goal) => {
-      set((state) => ({ goals: [...state.goals, goal] }));
-    },
-    setAllGoals: (goals) => {
-      set({ goals });
-    },
-    removeGoal: (id) => {
-      set((state) => ({ goals: state.goals.filter((goal) => goal.id !== id) }));
-    },
-  }))
+  devtools(
+    persist(
+      (set) => ({
+        goals: [],
+        resetGoal: () => {
+          set(() => ({ goals: [] }));
+        },
+        addGoal: (goal) => {
+          set((state) => ({ goals: [...state.goals, goal] }));
+        },
+        setAllGoals: (goals) => {
+          set({ goals });
+        },
+        removeGoal: (id) => {
+          set((state) => ({
+            goals: state.goals.filter((goal) => goal.id !== id),
+          }));
+        },
+      }),
+      { name: 'goal' }
+    )
+  )
 );
