@@ -45,7 +45,25 @@ function HomePage() {
   const goalRef = useRef<HTMLInputElement>();
   async function addGoalHandler() {
     const text = goalRef.current.value;
-    // addGoal()
+    await axios
+      .post(
+        '/api/goals',
+        { text },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      )
+      .then((res) => addGoal(res.data))
+      .catch(() =>
+        toast({
+          position: 'top',
+          description: 'Error! Unable to add Goal',
+          status: 'error',
+          isClosable: true,
+        })
+      );
   }
 
   return (

@@ -16,11 +16,12 @@ import { HiMenuAlt3 } from 'react-icons/hi';
 import { LogoContainer } from './styles';
 import HeadLink from './HeadLink';
 import isUserShown from 'apps/web-front/hooks/isUserShown';
-import { useAuthStore } from 'apps/web-front/feature/store';
+import { useAuthStore, useGoalState } from 'apps/web-front/feature/store';
 
 const Header = () => {
   const { isUser } = isUserShown();
   const { resetUser } = useAuthStore();
+  const { resetGoal } = useGoalState();
 
   return (
     <Flex
@@ -50,7 +51,10 @@ const Header = () => {
             textTransform="capitalize"
             size={{ base: 'xs', lg: 'lg' }}
             fontWeight="medium"
-            onClick={() => resetUser()}
+            onClick={() => {
+              resetUser();
+              resetGoal();
+            }}
           >
             logout
           </Button>

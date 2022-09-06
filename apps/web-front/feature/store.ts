@@ -39,6 +39,7 @@ export const useGoalState = create<GoalState>()(
         goals: [],
         resetGoal: () => {
           set(() => ({ goals: [] }));
+          localStorage.clear();
         },
         addGoal: (goal) => {
           set((state) => ({ goals: [...state.goals, goal] }));
