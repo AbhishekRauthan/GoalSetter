@@ -50,7 +50,7 @@ const Login = () => {
             <SecondaryHeading>Login and start setting goals</SecondaryHeading>
           </Box>
           <FormCon>
-            <Input type="email" ref={emailRef}>
+            <Input type="email" ref={emailRef} width="sm">
               email
             </Input>
             <PasswordInput ref={pwrdRef}>password</PasswordInput>

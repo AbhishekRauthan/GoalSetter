@@ -1,4 +1,4 @@
-import { Box, useToast } from '@chakra-ui/react';
+import { Box, Text, Tooltip, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import Router from 'next/router';
 import { useRef, useState } from 'react';
@@ -58,15 +58,20 @@ const Register = () => {
           <SecondaryHeading>Please create an account</SecondaryHeading>
         </Box>
         <FormCon>
-          <Input type="text" ref={nameRef}>
+          <Input type="text" ref={nameRef} width="sm">
             Name
           </Input>
-          <Input type="email" ref={emailRef}>
+          <Input type="email" ref={emailRef} width="sm">
             Email
           </Input>
-          <PasswordInput ref={passRef} onChange={checkPasswords}>
-            password
-          </PasswordInput>
+          <Text fontSize="sm" display={{ base: 'inline-block', lg: 'none' }}>
+            Passowrd should be 8 character length with numbers and symbols
+          </Text>
+          <Tooltip label="Passowrd should be 8 character length with numbers and symbols">
+            <PasswordInput ref={passRef} onChange={checkPasswords}>
+              password
+            </PasswordInput>
+          </Tooltip>
           <PasswordInput
             ref={conPassRef}
             onChange={checkPasswords}
