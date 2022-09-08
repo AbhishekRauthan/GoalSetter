@@ -8,7 +8,8 @@
     "build-web": "nx build web-front",
     "build-api": "nx build api",
     "test-web-front": "nx test web-front",
-    "test-api": "nx test api"
+    "test-api": "nx test api",
+    "serve": "concurrently \"yarn start-web\" \"yarn start-api\""
   },
   "private": true,
   "dependencies": {
@@ -22,7 +23,6 @@
     "@nestjs/mongoose": "^9.1.1",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^8.0.0",
-    "@nrwl/next": "14.3.5",
     "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
     "core-js": "^3.6.5",
@@ -41,6 +41,7 @@
     "zustand": "^4.1.1"
   },
   "devDependencies": {
+    "@nrwl/next": "14.3.5",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",
     "@nrwl/cli": "14.3.5",
@@ -63,6 +64,7 @@
     "@typescript-eslint/eslint-plugin": "~5.24.0",
     "@typescript-eslint/parser": "~5.24.0",
     "babel-jest": "27.5.1",
+    "concurrently": "^7.4.0",
     "cypress": "^9.1.0",
     "eslint": "~8.15.0",
     "eslint-config-next": "12.1.6",
