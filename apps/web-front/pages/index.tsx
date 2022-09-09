@@ -1,8 +1,9 @@
-import { Box, Spinner, useToast, VStack } from '@chakra-ui/react';
+import { Box, useToast, VStack } from '@chakra-ui/react';
 import axios from 'axios';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { PrimaryBtn } from '../components/Button';
 import { CenterCon, FormCon } from '../components/Container';
+import EditableGoal from '../components/EditGoal';
 import { PrimaryHeading, SecondaryHeading } from '../components/Heading';
 import { Input } from '../components/Input';
 import { useAuthStore, useGoalState } from '../feature/store';
@@ -13,8 +14,6 @@ function HomePage() {
   const toast = useToast();
   useEffect(() => {
     (async function () {
-      console.log('in useEffect start');
-
       if (user) {
         if (!localStorage.getItem('state')) {
           await axios
@@ -25,7 +24,6 @@ function HomePage() {
             })
             .then((response) => {
               setAllGoals(response.data);
-              console.log(response.data);
             })
             .catch(() =>
               toast({
@@ -75,15 +73,29 @@ function HomePage() {
             <SecondaryHeading paddingBottom="2">
               goals dashboard
             </SecondaryHeading>
-            <Input type="text" ref={goalRef}>
-              Goal
+            <Input type="text" ref={goalRef} w="lg">
+              write goal here
             </Input>
             <PrimaryBtn onClick={addGoalHandler}>add goal</PrimaryBtn>
             <Box bgColor="black" padding="0.2px" w="full" />
           </FormCon>
           <VStack alignItems="center" justifyContent="center">
             {goals.length > 0 ? (
-              goals.map((goal) => <p key={goal.id}>{goal.text}</p>)
+              <>
+                <SecondaryHeading paddingBottom="2">Goals</SecondaryHeading>
+                {goals.map((goal) => (
+                  <EditableGoal
+                    goal={goal}
+                    key={goal._id}
+                    onEditFinish={() => {
+                      console.log(`edit ${goal._id}`);
+                    }}
+                    onDelete={() => {
+                      console.log(`delete ${goal._id}`);
+                    }}
+                  />
+                ))}
+              </>
             ) : (
               <p>No Goals</p>
             )}

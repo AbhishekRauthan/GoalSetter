@@ -22,5 +22,5 @@ export interface User {
 export interface Goal {
   text: string;
   user: string;
-  id: string;
+  _id: string;
 }

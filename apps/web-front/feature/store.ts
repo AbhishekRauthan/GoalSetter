@@ -49,7 +49,7 @@ export const useGoalState = create<GoalState>()(
         },
         removeGoal: (id) => {
           set((state) => ({
-            goals: state.goals.filter((goal) => goal.id !== id),
+            goals: state.goals.filter((goal) => goal._id !== id),
           }));
         },
       }),
