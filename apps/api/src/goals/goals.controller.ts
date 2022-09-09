@@ -60,7 +60,7 @@ export class GoalsController {
       throw new HttpException(
         {
           status: HttpStatus.UNAUTHORIZED,
-          error: `User not found 2`,
+          error: `User not found`,
         },
         HttpStatus.UNAUTHORIZED
       );
@@ -127,10 +127,8 @@ export class GoalsController {
     @Req() req: UserObject,
     @Res() res: Response
   ) {
-    let goal;
-    try {
-      goal = await this.goalsService.getGoalById(id);
-    } catch (error) {
+    let goal = await this.goalsService.getGoalById(id);
+    if (!goal) {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
@@ -148,9 +146,8 @@ export class GoalsController {
         HttpStatus.UNAUTHORIZED
       );
     }
-    try {
-      await this.goalsService.deleteGoalById(id);
-    } catch (error) {
+
+    await this.goalsService.deleteGoalById(id).catch(() => {
       throw new HttpException(
         {
           status: HttpStatus.EXPECTATION_FAILED,
@@ -158,7 +155,8 @@ export class GoalsController {
         },
         HttpStatus.EXPECTATION_FAILED
       );
-    }
+    });
+
     res.status(HttpStatus.OK).send({ id });
   }
 }
