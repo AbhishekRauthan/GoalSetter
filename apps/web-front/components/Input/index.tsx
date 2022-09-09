@@ -16,7 +16,7 @@ interface InputProps extends ChakraInputProps {
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ type, children, ...rest }, ref) => (
-    <InputGroup position="relative" transform="scale(1.23)">
+    <InputGroup position="relative" w={"max-content"} transform="scale(1.23)">
       <ChakraInput
         _placeholder={{ opacity: 0 }}
         placeholder="Name"
