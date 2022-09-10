@@ -10,7 +10,7 @@ import { useAuthStore, useGoalState } from '../feature/store';
 
 function HomePage() {
   const { user } = useAuthStore();
-  const { setAllGoals, goals, addGoal } = useGoalState();
+  const { setAllGoals, goals, addGoal, removeGoal } = useGoalState();
   const toast = useToast();
   useEffect(() => {
     (async function () {
@@ -90,8 +90,30 @@ function HomePage() {
                     onEditFinish={() => {
                       console.log(`edit ${goal._id}`);
                     }}
-                    onDelete={() => {
-                      console.log(`delete ${goal._id}`);
+                    onDelete={async () => {
+                      await axios
+                        .delete(`/api/goals/${goal._id}`, {
+                          headers: {
+                            Authorization: `Bearer ${user.token}`,
+                          },
+                        })
+                        .then(() => {
+                          toast({
+                            isClosable: true,
+                            position: 'top',
+                            description: 'Goal Deletion Successfull',
+                            status: 'success',
+                          });
+                          removeGoal(goal._id);
+                        })
+                        .catch(() => {
+                          toast({
+                            position: 'top',
+                            description: 'Error! Unable to delete Goal',
+                            status: 'error',
+                            isClosable: true,
+                          });
+                        });
                     }}
                   />
                 ))}
