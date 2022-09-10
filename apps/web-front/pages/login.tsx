@@ -53,7 +53,16 @@ const Login = () => {
             <Input type="email" ref={emailRef} width="sm">
               email
             </Input>
-            <PasswordInput ref={pwrdRef}>password</PasswordInput>
+            <PasswordInput
+              onKeyDownCapture={(e) => {
+                if (e.key === 'Enter') {
+                  onSubmit();
+                }
+              }}
+              ref={pwrdRef}
+            >
+              password
+            </PasswordInput>
             <PrimaryBtn onClick={onSubmit}>Login</PrimaryBtn>
           </FormCon>
         </>

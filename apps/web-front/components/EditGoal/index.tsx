@@ -116,7 +116,17 @@ const EditableGoal = ({ goal, onDelete }: EditableGoalProps) => {
         justifyContent={'space-between'}
       >
         <EditablePreview />
-        <Input w={'xs'} as={EditableInput} children={''} ref={inputRef} />
+        <Input
+          w={'xs'}
+          as={EditableInput}
+          children={''}
+          ref={inputRef}
+          onKeyDownCapture={(e) => {
+            if (e.key === 'Enter') {
+              onEditFinish();
+            }
+          }}
+        />
         <EditableControls />
       </HStack>
     </Editable>

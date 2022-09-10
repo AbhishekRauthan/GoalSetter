@@ -8,9 +8,11 @@ import { CenterCon, FormCon } from '../components/Container';
 import { PrimaryHeading, SecondaryHeading } from '../components/Heading';
 import { Input, PasswordInput } from '../components/Input';
 import { useAuthStore } from '../feature/store';
+import isUserShown from '../hooks/isUserShown';
 
 const Register = () => {
   const [isEqualPass, setIsEqualPass] = useState(false);
+  const { isUser } = isUserShown();
   const nameRef = useRef<HTMLInputElement>();
   const emailRef = useRef<HTMLInputElement>();
   const passRef = useRef<HTMLInputElement>();
@@ -28,7 +30,15 @@ const Register = () => {
     const name = nameRef.current.value;
     const email = emailRef.current.value;
     const password = passRef.current.value;
-
+    const conPass = conPassRef.current.value;
+    if (password !== conPass) {
+      toast({
+        position: 'top',
+        status: 'error',
+        isClosable: true,
+        title: 'Error! Passwords don not match',
+      });
+    }
     await axios
       .post('/api/users', {
         email,
@@ -40,8 +50,6 @@ const Register = () => {
         Router.push('/');
       })
       .catch((err) => {
-        console.log(err);
-
         toast({
           position: 'top',
           status: 'error',
@@ -53,35 +61,51 @@ const Register = () => {
   return (
     <>
       <CenterCon>
-        <Box>
-          <PrimaryHeading icon={FaUser}>Register</PrimaryHeading>
-          <SecondaryHeading>Please create an account</SecondaryHeading>
-        </Box>
-        <FormCon>
-          <Input type="text" ref={nameRef} width="sm">
-            Name
-          </Input>
-          <Input type="email" ref={emailRef} width="sm">
-            Email
-          </Input>
-          <Text fontSize="sm" display={{ base: 'inline-block', lg: 'none' }}>
-            Passowrd should be 8 character length with numbers and symbols
-          </Text>
-          <Tooltip label="Passowrd should be 8 character length with numbers and symbols">
-            <PasswordInput ref={passRef} onChange={checkPasswords}>
-              password
-            </PasswordInput>
-          </Tooltip>
-          <PasswordInput
-            ref={conPassRef}
-            onChange={checkPasswords}
-            focusBorderColor={isEqualPass ? 'green.500' : 'red.500'}
-            borderColor={isEqualPass ? 'green.500' : 'red.500'}
-          >
-            confirm password
-          </PasswordInput>
-          <PrimaryBtn onClick={onSubmit}>Register</PrimaryBtn>
-        </FormCon>
+        {isUser ? (
+          <>
+            <PrimaryHeading>Already logged in as a user</PrimaryHeading>
+          </>
+        ) : (
+          <>
+            <Box>
+              <PrimaryHeading icon={FaUser}>Register</PrimaryHeading>
+              <SecondaryHeading>Please create an account</SecondaryHeading>
+            </Box>
+            <FormCon>
+              <Input type="text" ref={nameRef} width="sm">
+                Name
+              </Input>
+              <Input type="email" ref={emailRef} width="sm">
+                Email
+              </Input>
+              <Text
+                fontSize="sm"
+                display={{ base: 'inline-block', lg: 'none' }}
+              >
+                Passowrd should be 8 character length with numbers and symbols
+              </Text>
+              <Tooltip label="Passowrd should be 8 character length with numbers and symbols">
+                <PasswordInput ref={passRef} onChange={checkPasswords}>
+                  password
+                </PasswordInput>
+              </Tooltip>
+              <PasswordInput
+                ref={conPassRef}
+                onChange={checkPasswords}
+                focusBorderColor={isEqualPass ? 'green.500' : 'red.500'}
+                borderColor={isEqualPass ? 'green.500' : 'red.500'}
+                onKeyDownCapture={(e) => {
+                  if (e.key === 'Enter') {
+                    onSubmit();
+                  }
+                }}
+              >
+                confirm password
+              </PasswordInput>
+              <PrimaryBtn onClick={onSubmit}>Register</PrimaryBtn>
+            </FormCon>
+          </>
+        )}
       </CenterCon>
     </>
   );
