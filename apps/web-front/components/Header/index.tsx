@@ -16,12 +16,12 @@ import { HiMenuAlt3 } from 'react-icons/hi';
 import { LogoContainer } from './styles';
 import HeadLink from './HeadLink';
 import isUserShown from 'apps/web-front/hooks/isUserShown';
-import { useAuthStore, useGoalState } from 'apps/web-front/feature/store';
+import { useAuthStore, useGoalStore } from 'apps/web-front/feature/store';
 
 const Header = () => {
   const { isUser } = isUserShown();
   const { resetUser } = useAuthStore();
-  const { resetGoal } = useGoalState();
+  const { resetGoal } = useGoalStore();
 
   return (
     <Flex

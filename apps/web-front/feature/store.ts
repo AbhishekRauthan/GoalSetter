@@ -14,6 +14,7 @@ export interface GoalState {
   resetGoal: () => void;
   setAllGoals: (goals: Goal[]) => void;
   removeGoal: (id: string) => void;
+  updateGoal: (goal: Goal) => void;
 }
 
 export const useAuthStore = create<UserState>()(
@@ -32,7 +33,7 @@ export const useAuthStore = create<UserState>()(
   }))
 );
 
-export const useGoalState = create<GoalState>()(
+export const useGoalStore = create<GoalState>()(
   devtools(
     persist(
       (set) => ({
@@ -51,6 +52,13 @@ export const useGoalState = create<GoalState>()(
           set((state) => ({
             goals: state.goals.filter((goal) => goal._id !== id),
           }));
+        },
+        updateGoal: (goal) => {
+          set((state) => {
+            const goals = state.goals.filter((g) => g._id !== goal._id);
+            goals.push(goal);
+            return { goals };
+          });
         },
       }),
       { name: 'goal' }

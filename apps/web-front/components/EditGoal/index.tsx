@@ -7,19 +7,55 @@ import {
   Icon,
   IconButton,
   useEditableControls,
+  useToast,
 } from '@chakra-ui/react';
 import { Goal } from '@full-stack/types';
 import { Input } from '../Input';
 import { FiCheck, FiEdit2 } from 'react-icons/fi';
 import { AiOutlineClose } from 'react-icons/ai';
 import { RiDeleteBin2Fill } from 'react-icons/ri';
+import { useRef } from 'react';
+import { useAuthStore, useGoalStore } from 'apps/web-front/feature/store';
+import axios from 'axios';
 
 interface EditableGoalProps {
   goal: Goal;
-  onEditFinish: () => void;
   onDelete: () => void;
 }
-const EditableGoal = ({ goal, onEditFinish,onDelete }: EditableGoalProps) => {
+const EditableGoal = ({ goal, onDelete }: EditableGoalProps) => {
+  const inputRef = useRef<HTMLInputElement>();
+  const toast = useToast();
+  const { user } = useAuthStore();
+  const { updateGoal } = useGoalStore();
+  async function onEditFinish() {
+    await axios
+      .put(
+        `/api/goals/${goal._id}`,
+        { text: inputRef.current.value },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      )
+      .then(() => {
+        toast({
+          isClosable: true,
+          position: 'top',
+          description: 'Goal Updation Successfull',
+          status: 'success',
+        });
+        updateGoal(goal);
+      })
+      .catch(() => {
+        toast({
+          position: 'top',
+          description: 'Error! Unable to update Goal',
+          status: 'error',
+          isClosable: true,
+        });
+      });
+  }
   function EditableControls() {
     const {
       isEditing,
@@ -80,7 +116,7 @@ const EditableGoal = ({ goal, onEditFinish,onDelete }: EditableGoalProps) => {
         justifyContent={'space-between'}
       >
         <EditablePreview />
-        <Input w={'xs'} as={EditableInput} children={''} />
+        <Input w={'xs'} as={EditableInput} children={''} ref={inputRef} />
         <EditableControls />
       </HStack>
     </Editable>

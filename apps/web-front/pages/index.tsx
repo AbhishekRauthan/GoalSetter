@@ -6,11 +6,11 @@ import { CenterCon, FormCon } from '../components/Container';
 import EditableGoal from '../components/EditGoal';
 import { PrimaryHeading, SecondaryHeading } from '../components/Heading';
 import { Input } from '../components/Input';
-import { useAuthStore, useGoalState } from '../feature/store';
+import { useAuthStore, useGoalStore } from '../feature/store';
 
 function HomePage() {
   const { user } = useAuthStore();
-  const { setAllGoals, goals, addGoal, removeGoal } = useGoalState();
+  const { setAllGoals, goals, addGoal, removeGoal } = useGoalStore();
   const toast = useToast();
   useEffect(() => {
     (async function () {
@@ -87,9 +87,6 @@ function HomePage() {
                   <EditableGoal
                     goal={goal}
                     key={goal._id}
-                    onEditFinish={() => {
-                      console.log(`edit ${goal._id}`);
-                    }}
                     onDelete={async () => {
                       await axios
                         .delete(`/api/goals/${goal._id}`, {
