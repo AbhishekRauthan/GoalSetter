@@ -34,7 +34,14 @@ export const PrimaryHeading: FC<HeadingProp> = ({
 
 export const SecondaryHeading: FC<HeadingProp> = ({ children, ...rest }) => {
   return (
-    <Heading as="h2" color="#828282" fontWeight="semibold" {...rest}>
+    <Heading
+      as="h2"
+      color="#828282"
+      fontWeight="semibold"
+      textAlign="center"
+      fontSize={{base:"2xl", md: '3xl', lg: '4xl'}}
+      {...rest}
+    >
       {children}
     </Heading>
   );
