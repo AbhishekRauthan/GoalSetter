@@ -14,46 +14,67 @@ interface InputProps extends ChakraInputProps {
   type?: string;
 }
 
+const InputWrapper = ({ children }: { children: ReactNode }) => {
+  return (
+    <InputGroup
+      position="relative"
+      w={{ base: '80vw', md: '50vw', lg: 'max-content' }}
+      transform={{ base: 'none', lg: 'scale(1.23)' }}
+    >
+      {children}
+    </InputGroup>
+  );
+};
+
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ type, children, ...rest }, ref) => (
-    <InputGroup position="relative" w={"max-content"} transform="scale(1.23)">
+    <InputWrapper>
       <ChakraInput
         _placeholder={{ opacity: 0 }}
         placeholder="Name"
         type={type}
         variant="flushed"
-        size="sm"
         focusBorderColor="black"
         className="peer"
+        _focusVisible={{
+          boxShadow: 'none',
+          borderColor: '#000',
+        }}
         ref={ref}
         {...rest}
       />
       <FormLabel>{children}</FormLabel>
-    </InputGroup>
+    </InputWrapper>
   )
 );
+Input.displayName = 'Input';
 
 export const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
   ({ children, ...rest }, ref) => {
     const [showPass, setShowPass] = useState(false);
     return (
-      <InputGroup position="relative" transform="scale(1.23)">
+      <InputWrapper>
         <ChakraInput
           _placeholder={{ opacity: 0 }}
           type={showPass ? 'text' : 'password'}
           placeholder="Name"
           variant="flushed"
           focusBorderColor="black"
+          size="sm"
           className="peer"
+          _focusVisible={{
+            boxShadow: 'none',
+            borderColor: '#000',
+          }}
           ref={ref}
           {...rest}
         />
         <FormLabel>{children}</FormLabel>
-        <InputRightElement
-          onClick={() => setShowPass(!showPass)}
-          children={<Icon as={showPass ? FiEye : FiEyeOff} color="black" />}
-        />
-      </InputGroup>
+        <InputRightElement onClick={() => setShowPass(!showPass)}>
+          <Icon as={showPass ? FiEye : FiEyeOff} color="black" />
+        </InputRightElement>
+      </InputWrapper>
     );
   }
 );
+PasswordInput.displayName = 'PasswordInput';
