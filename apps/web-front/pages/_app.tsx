@@ -36,9 +36,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
             <Spinner size="lg" />
           </CenterCon>
         ) : (
-          <main className="app">
-            <Component {...pageProps} />
-          </main>
+          <Component {...pageProps} />
         )}
       </ChakraProvider>
     </>

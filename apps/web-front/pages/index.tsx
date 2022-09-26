@@ -73,7 +73,7 @@ function HomePage() {
             <SecondaryHeading paddingBottom="2">
               goals dashboard
             </SecondaryHeading>
-            <Input type="text" ref={goalRef} w="lg">
+            <Input type="text" ref={goalRef}>
               write goal here
             </Input>
             <PrimaryBtn onClick={addGoalHandler}>add goal</PrimaryBtn>
