@@ -29,10 +29,10 @@ const Login = () => {
       router.push('/');
     } catch (error) {
       toast({
-        position: 'bottom',
+        position: 'top',
         status: 'error',
         isClosable: true,
-        title: 'Error! Unable to Login',
+        title: 'Error! Invalid username or password',
       });
     }
   }

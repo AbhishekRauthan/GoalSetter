@@ -3,9 +3,9 @@ import {
   EditableInput,
   EditablePreview,
   Flex,
-  HStack,
   Icon,
   IconButton,
+  Stack,
   useEditableControls,
   useToast,
 } from '@chakra-ui/react';
@@ -106,29 +106,39 @@ const EditableGoal = ({ goal, onDelete }: EditableGoalProps) => {
       defaultValue={goal.text}
       display="flex"
       alignItems="center"
+      width={{ base: '90vw', md: '70vw', lg: 'xl' }}
       justifyContent="center"
     >
-      <HStack
-        spacing={'6'}
-        padding="2"
+      <Stack
+        spacing={{ base: '1', md: '0' }}
+        direction={{ base: 'column', md: 'row' }}
+        shadow="lg"
+        padding={{base:"2",lg:"3"}}
         display="flex"
-        w="sm"
-        justifyContent={'space-between'}
+        width={{ base: '60vw', lg: '100%' }}
+        alignItems={'center'}
+        paddingX={{ base: '10', lg: '0' }}
+        justifyContent={'space-evenly'}
+        marginX={{lg:"auto"}}
+        border={'1px'}
+        borderRadius="md"
       >
-        <EditablePreview />
+        <EditablePreview fontSize={{lg:"xl"}}/>
         <Input
-          w={'xs'}
+          w={{ base: '55vw', md: 'xs' }}
           as={EditableInput}
-          children={''}
+          marginX="auto"
           ref={inputRef}
           onKeyDownCapture={(e) => {
             if (e.key === 'Enter') {
               onEditFinish();
             }
           }}
-        />
+        >
+          {''}
+        </Input>
         <EditableControls />
-      </HStack>
+      </Stack>
     </Editable>
   );
 };

@@ -77,43 +77,49 @@ function HomePage() {
               write goal here
             </Input>
             <PrimaryBtn onClick={addGoalHandler}>add goal</PrimaryBtn>
-            <Box bgColor="black" padding="0.2px" w="full" />
+            <Box
+              bgColor="black"
+              padding="0.2px"
+              w={{ base: '80%', lg: 'full' }}
+            />
           </FormCon>
           <VStack alignItems="center" justifyContent="center">
             {goals.length > 0 ? (
               <>
                 <SecondaryHeading paddingBottom="2">Goals</SecondaryHeading>
-                {goals.map((goal) => (
-                  <EditableGoal
-                    goal={goal}
-                    key={goal._id}
-                    onDelete={async () => {
-                      await axios
-                        .delete(`/api/goals/${goal._id}`, {
-                          headers: {
-                            Authorization: `Bearer ${user.token}`,
-                          },
-                        })
-                        .then(() => {
-                          toast({
-                            isClosable: true,
-                            position: 'top',
-                            description: 'Goal Deletion Successfull',
-                            status: 'success',
+                <VStack spacing="6">
+                  {goals.map((goal) => (
+                    <EditableGoal
+                      goal={goal}
+                      key={goal._id}
+                      onDelete={async () => {
+                        await axios
+                          .delete(`/api/goals/${goal._id}`, {
+                            headers: {
+                              Authorization: `Bearer ${user.token}`,
+                            },
+                          })
+                          .then(() => {
+                            toast({
+                              isClosable: true,
+                              position: 'top',
+                              description: 'Goal Deletion Successfull',
+                              status: 'success',
+                            });
+                            removeGoal(goal._id);
+                          })
+                          .catch(() => {
+                            toast({
+                              position: 'top',
+                              description: 'Error! Unable to delete Goal',
+                              status: 'error',
+                              isClosable: true,
+                            });
                           });
-                          removeGoal(goal._id);
-                        })
-                        .catch(() => {
-                          toast({
-                            position: 'top',
-                            description: 'Error! Unable to delete Goal',
-                            status: 'error',
-                            isClosable: true,
-                          });
-                        });
-                    }}
-                  />
-                ))}
+                      }}
+                    />
+                  ))}
+                </VStack>
               </>
             ) : (
               <p>No Goals</p>
