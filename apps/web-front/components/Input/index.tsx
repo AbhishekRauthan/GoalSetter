@@ -5,7 +5,7 @@ import {
   InputProps as ChakraInputProps,
   InputRightElement,
 } from '@chakra-ui/react';
-import { FormLabel } from 'apps/web-front/globalStyles';
+import { FormLabel } from './styles';
 import { forwardRef, ReactNode, useState } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 
