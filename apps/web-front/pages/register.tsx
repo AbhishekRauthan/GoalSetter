@@ -1,4 +1,4 @@
-import { Box, Text, Tooltip, useToast } from '@chakra-ui/react';
+import { Box, Tooltip, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import Router from 'next/router';
 import { useRef, useState } from 'react';
@@ -31,32 +31,51 @@ const Register = () => {
     const email = emailRef.current.value;
     const password = passRef.current.value;
     const conPass = conPassRef.current.value;
-    if (password !== conPass) {
-      toast({
+    if (!(email && name && password && conPass)) {
+      console.log({ email, password, name, conPass });
+
+      return toast({
         position: 'top',
         status: 'error',
         isClosable: true,
-        title: 'Error! Passwords don not match',
+        title: 'Error! Please fill all fields in the form',
       });
-    }
-    await axios
-      .post('/api/users', {
-        email,
-        name,
-        password,
-      })
-      .then((response) => {
-        setUser(response.data);
-        Router.push('/');
-      })
-      .catch((err) => {
-        toast({
-          position: 'top',
-          status: 'error',
-          isClosable: true,
-          title: err.response.data.error,
+    } else if (
+      !password.match(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]$/)
+    ) {
+      return toast({
+        position: 'top',
+        status: 'error',
+        isClosable: true,
+        title: 'Error! Not a strong password',
+      });
+    } else if (password !== conPass) {
+      return toast({
+        position: 'top',
+        status: 'error',
+        isClosable: true,
+        title: 'Error! Passwords do not match',
+      });
+    } else {
+      await axios
+        .post('/api/users', {
+          email,
+          name,
+          password,
+        })
+        .then((response) => {
+          setUser(response.data);
+          Router.push('/');
+        })
+        .catch((err) => {
+          toast({
+            position: 'top',
+            status: 'error',
+            isClosable: true,
+            title: err.response.data.error,
+          });
         });
-      });
+    }
   };
   return (
     <>
@@ -72,19 +91,13 @@ const Register = () => {
               <SecondaryHeading>Please create an account</SecondaryHeading>
             </Box>
             <FormCon>
-              <Input type="text" ref={nameRef} width="sm">
+              <Input type="text" ref={nameRef}>
                 Name
               </Input>
-              <Input type="email" ref={emailRef} width="sm">
+              <Input type="email" ref={emailRef}>
                 Email
               </Input>
-              <Text
-                fontSize="sm"
-                display={{ base: 'inline-block', lg: 'none' }}
-              >
-                Passowrd should be 8 character length with numbers and symbols
-              </Text>
-              <Tooltip label="Passowrd should be 8 character length with numbers and symbols">
+              <Tooltip label="Passowrd should be atleast 8 character length with numbers and symbols">
                 <PasswordInput ref={passRef} onChange={checkPasswords}>
                   password
                 </PasswordInput>
@@ -94,6 +107,10 @@ const Register = () => {
                 onChange={checkPasswords}
                 focusBorderColor={isEqualPass ? 'green.500' : 'red.500'}
                 borderColor={isEqualPass ? 'green.500' : 'red.500'}
+                _focusVisible={{
+                  boxShadow: 'none',
+                  borderColor: isEqualPass ? 'green.500' : 'red.500',
+                }}
                 onKeyDownCapture={(e) => {
                   if (e.key === 'Enter') {
                     onSubmit();
