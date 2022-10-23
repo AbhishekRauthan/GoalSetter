@@ -2,7 +2,35 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type UserModel {
+  """user id"""
+  _id: String!
+
+  """user email"""
+  email: String!
+
+  """user name"""
+  name: String!
+
+  """generated user token"""
+  token: String!
+}
+
 type Query {
   sayHello: String!
-  sayUser: String!
+}
+
+type Mutation {
+  registerUser(userRegisterModel: UserRegisterModel!): UserModel!
+}
+
+input UserRegisterModel {
+  """registration email"""
+  email: String!
+
+  """registration name"""
+  name: String!
+
+  """registration password"""
+  password: String!
 }
