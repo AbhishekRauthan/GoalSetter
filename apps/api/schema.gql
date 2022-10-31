@@ -28,9 +28,9 @@ input UserRegisterModel {
   """registration email"""
   email: String!
 
-  """registration name"""
-  name: String!
-
   """registration password"""
   password: String!
+
+  """registration name"""
+  name: String!
 }
