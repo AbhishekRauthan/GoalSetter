@@ -2,7 +2,6 @@ import {
   ConflictException,
   NotFoundException,
   NotImplementedException,
-  UsePipes,
 } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
@@ -11,7 +10,6 @@ import { UserModel } from './model/user.model';
 import { UserRegisterModel } from './model/userRegister.input';
 import { Users } from './users.schema';
 import { UsersService } from './users.service';
-import { ValidationPipe } from '../pipe/validation.pipe';
 import { UserLoginModel } from './model/userLogin.input';
 
 @Resolver(() => Users)
@@ -22,7 +20,6 @@ export class UsersResolver {
   ) {}
 
   @Mutation((returns) => UserModel)
-  @UsePipes(new ValidationPipe())
   async registerUser(
     @Args('userRegister')
     userRegisterModel: UserRegisterModel
@@ -51,7 +48,6 @@ export class UsersResolver {
   }
 
   @Query((returns) => UserModel)
-  @UsePipes(new ValidationPipe())
   async loginUser(
     @Args('userLogin')
     userRegister: UserLoginModel
