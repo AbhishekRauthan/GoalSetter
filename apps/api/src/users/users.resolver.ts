@@ -2,6 +2,7 @@ import {
   ConflictException,
   NotFoundException,
   NotImplementedException,
+  UseGuards,
 } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
@@ -11,6 +12,8 @@ import { UserRegisterModel } from './model/userRegister.input';
 import { Users } from './users.schema';
 import { UsersService } from './users.service';
 import { UserLoginModel } from './model/userLogin.input';
+import { JwtAuthGuard } from './jwt/jwt.gaurd';
+import { CurrentUser } from './jwt/current-user.decorator';
 
 @Resolver(() => Users)
 export class UsersResolver {
@@ -63,7 +66,13 @@ export class UsersResolver {
         token: this.jwtService.sign({ id: user.id }),
       };
     } else {
-      throw new NotFoundException(`User with email:'${email}' not found.`)
+      throw new NotFoundException(`User with email:'${email}' not found.`);
     }
+  }
+
+  @Query((returns) => UserModel)
+  @UseGuards(JwtAuthGuard)
+  getUser(@CurrentUser() user:any) {
+    return user;
   }
 }

@@ -19,6 +19,7 @@ type UserModel {
 type Query {
   sayHello: String!
   loginUser(userLogin: UserLoginModel!): UserModel!
+  getUser: UserModel!
 }
 
 input UserLoginModel {
