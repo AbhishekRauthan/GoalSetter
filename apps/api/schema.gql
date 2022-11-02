@@ -18,10 +18,19 @@ type UserModel {
 
 type Query {
   sayHello: String!
+  loginUser(userLogin: UserLoginModel!): UserModel!
+}
+
+input UserLoginModel {
+  """registration email"""
+  email: String!
+
+  """registration password"""
+  password: String!
 }
 
 type Mutation {
-  registerUser(userRegisterModel: UserRegisterModel!): UserModel!
+  registerUser(userRegister: UserRegisterModel!): UserModel!
 }
 
 input UserRegisterModel {

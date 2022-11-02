@@ -1,17 +1,18 @@
 import {
-  BadRequestException,
   ConflictException,
+  NotFoundException,
   NotImplementedException,
   UsePipes,
 } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
-import { genSalt, hash } from 'bcryptjs';
+import { compare, genSalt, hash } from 'bcryptjs';
 import { UserModel } from './model/user.model';
 import { UserRegisterModel } from './model/userRegister.input';
 import { Users } from './users.schema';
 import { UsersService } from './users.service';
 import { ValidationPipe } from '../pipe/validation.pipe';
+import { UserLoginModel } from './model/userLogin.input';
 
 @Resolver(() => Users)
 export class UsersResolver {
@@ -23,7 +24,7 @@ export class UsersResolver {
   @Mutation((returns) => UserModel)
   @UsePipes(new ValidationPipe())
   async registerUser(
-    @Args('userRegisterModel')
+    @Args('userRegister')
     userRegisterModel: UserRegisterModel
   ) {
     const { email, name, password } = userRegisterModel;
@@ -41,6 +42,32 @@ export class UsersResolver {
       .catch(() => {
         throw new NotImplementedException('Unable to create user');
       });
-    return user;
+    return {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      token: this.jwtService.sign({ id: user.id }),
+    };
+  }
+
+  @Query((returns) => UserModel)
+  @UsePipes(new ValidationPipe())
+  async loginUser(
+    @Args('userLogin')
+    userRegister: UserLoginModel
+  ) {
+    const { email, password } = userRegister;
+
+    const user = await this.usersService.getUser(email);
+    if (user && (await compare(password, user.password))) {
+      return {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        token: this.jwtService.sign({ id: user.id }),
+      };
+    } else {
+      throw new NotFoundException(`User with email:'${email}' not found.`)
+    }
   }
 }
