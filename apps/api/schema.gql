@@ -1,0 +1,46 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type UserModel {
+  """user id"""
+  _id: String!
+
+  """user email"""
+  email: String!
+
+  """user name"""
+  name: String!
+
+  """generated user token"""
+  token: String!
+}
+
+type Query {
+  sayHello: String!
+  loginUser(userLogin: UserLoginModel!): UserModel!
+  getUser: UserModel!
+}
+
+input UserLoginModel {
+  """registration email"""
+  email: String!
+
+  """registration password"""
+  password: String!
+}
+
+type Mutation {
+  registerUser(userRegister: UserRegisterModel!): UserModel!
+}
+
+input UserRegisterModel {
+  """registration email"""
+  email: String!
+
+  """registration password"""
+  password: String!
+
+  """registration name"""
+  name: String!
+}

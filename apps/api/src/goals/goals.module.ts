@@ -1,16 +1,15 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from '../users/users.module';
-import { GoalsController } from './goals.controller';
 import { GoalSchema, Goals } from './goals.schema';
 import { GoalsService } from './goals.service';
+import { GoalsResolver } from './goals.resolver';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Goals.name, schema: GoalSchema }]),
-    UsersModule
+    UsersModule,
   ],
-  controllers: [GoalsController],
-  providers: [GoalsService],
+  providers: [GoalsService, GoalsResolver],
 })
 export class GoalsModule {}
